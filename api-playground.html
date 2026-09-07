@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API_PLAYGROUND // BRUTALIST TOOL</title>
+    <style>
+        /* --- BRUTALIST DESIGN SYSTEM --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --accent: #ff0055;
+            --border: 3px solid #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.3;
+            padding: 2rem;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        header {
+            border: var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .status-badge {
+            background: var(--bg);
+            color: var(--fg);
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            border: 2px solid var(--bg);
+        }
+
+        .b-box {
+            border: var(--border);
+            padding: 2rem;
+            background: var(--bg);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--fg);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .request-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        select, input[type="text"], textarea {
+            background: #0a0a0a;
+            color: var(--fg);
+            border: 2px solid var(--fg);
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            outline: none;
+            text-transform: none;
+        }
+
+        select {
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: var(--bg);
+        }
+
+        select:focus, input[type="text"]:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .url-input {
+            flex-grow: 1;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media(max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+            .request-bar {
+                flex-direction: column;
+            }
+            .url-input {
+                width: 100%;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        textarea {
+            width: 100%;
+            resize: vertical;
+        }
+
+        .output-box {
+            background: #050505;
+            border: 2px dashed var(--fg);
+            padding: 1.5rem;
+            min-height: 250px;
+            max-height: 450px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            text-transform: none;
+            color: #00ff66; /* Terminal output green hint */
+        }
+
+        .status-success { color: #00ff66 !important; }
+        .status-error { color: #ff0055 !important; }
+
+        .meta-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--fg);
+            padding-top: 0.5rem;
+        }
+
+        .b-button {
+            display: inline-block;
+            background: var(--fg);
+            color: var(--bg);
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid var(--fg);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
+        }
+
+        .b-button:hover {
+            background: var(--bg);
+            color: var(--fg);
+            transform: translate(-3px, -3px);
+            box-shadow: 4px 4px 0px 0px var(--accent);
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            background: var(--bg);
+            color: var(--fg);
+            border: 2px solid var(--fg);
+            padding: 0.4rem 0.8rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .preset-btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .footer-nav {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- HEADER -->
+        <header>
+            <div>
+                <h1>API_PLAYGROUND</h1>
+                <p>UTILITY_02 // MOCK CLIENT & HTTP INTERFACE</p>
+            </div>
+            <div class="status-badge">
+                STATUS: READY
+            </div>
+        </header>
+
+        <!-- CONTROLS CONTAINER -->
+        <div class="b-box">
+            <h2>// REQUEST BUILDER</h2>
+            
+            <!-- QUICK TEST PRESETS -->
+            <label>QUICK API PRESETS:</label>
+            <div class="preset-buttons">
+                <button class="preset-btn" onclick="loadPreset('GET', 'https://jsonplaceholder.typicode.com/posts/1', '')">GET JSONPLACEHOLDER POST</button>
+                <button class="preset-btn" onclick="loadPreset('GET', 'https://api.ipify.org?format=json', '')">GET PUBLIC IP</button>
+                <button class="preset-btn" onclick="loadPreset('POST', 'https://jsonplaceholder.typicode.com/posts', '{\n  \"title\": \"Brutalist Post\",\n  \"body\": \"Testing API mock client layout\",\n  \"userId\": 1\n}')">POST MOCK DATA</button>
+            </div>
+
+            <!-- REQUEST BAR -->
+            <div class="request-bar">
+                <select id="httpMethod" onchange="toggleBodyInput()">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+                <input type="text" id="requestUrl" class="url-input" value="https://jsonplaceholder.typicode.com/posts/1" placeholder="Enter endpoint URL...">
+                <button class="b-button" onclick="executeRequest()">EXECUTE // SEND</button>
+            </div>
+
+            <!-- OPTIONAL BODY INPUT FOR POST/PUT -->
+            <div id="bodyContainer" style="display: none; margin-top: 1rem;">
+                <label for="requestBody">REQUEST BODY (RAW JSON):</label>
+                <textarea id="requestBody" rows="5" placeholder="{&quot;key&quot;: &quot;value&quot;}"></textarea>
+            </div>
+        </div>
+
+        <!-- OUTPUT GRID -->
+        <div class="grid-2">
+            
+            <!-- RESPONSE HEADERS / STATUS -->
+            <div class="b-box" style="margin-bottom: 0;">
+                <h2>// RESPONSE META</h2>
+                <label>STATUS & PROTOCOL:</label>
+                <div id="responseMeta" class="output-box" style="min-height: 80px; max-height: 120px;">// AWAITING EXECUTION...</div>
+                <div style="margin-top: 1.5rem;">
+                    <label>RESPONSE HEADERS:</label>
+                    <div id="responseHeaders" class="output-box" style="min-height: 120px; max-height: 200px;">// NO HEADERS LOGGED</div>
+                </div>
+            </div>
+
+            <!-- RESPONSE PAYLOAD -->
+            <div class="b-box" style="margin-bottom: 0;">
+                <h2>// RESPONSE PAYLOAD</h2>
+                <label>RAW DATA BODY:</label>
+                <div id="responsePayload" class="output-box">// AWAITING EXECUTION...</div>
+                <div class="meta-stats">
+                    <span id="execTime">TIME: 0ms</span>
+                    <button class="preset-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="copyPayload()">COPY PAYLOAD</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BACK LINK -->
+        <div class="footer-nav">
+            <a href="index.html" class="b-button"><- BACK TO PORTFOLIO</a>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        function toggleBodyInput() {
+            const method = document.getElementById('httpMethod').value;
+            const bodyContainer = document.getElementById('bodyContainer');
+            if (method === 'POST' || method === 'PUT') {
+                bodyContainer.style.display = 'block';
+            } else {
+                bodyContainer.style.display = 'none';
+            }
+        }
+
+        function loadPreset(method, url, body) {
+            document.getElementById('httpMethod').value = method;
+            document.getElementById('requestUrl').value = url;
+            document.getElementById('requestBody').value = body;
+            toggleBodyInput();
+        }
+
+        async function executeRequest() {
+            const method = document.getElementById('httpMethod').value;
+            const url = document.getElementById('requestUrl').value;
+            const bodyInput = document.getElementById('requestBody').value;
+            
+            const metaBox = document.getElementById('responseMeta');
+            const headersBox = document.getElementById('responseHeaders');
+            const payloadBox = document.getElementById('responsePayload');
+            const timeSpan = document.getElementById('execTime');
+
+            if (!url) {
+                alert('ENTER A VALID URL');
+                return;
+            }
+
+            metaBox.textContent = '// SENDING REQUEST...';
+            headersBox.textContent = '// FETCHING HEADERS...';
+            payloadBox.textContent = '// WAITING FOR SERVER RESPONSE...';
+
+            const startTime = performance.now();
+
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if ((method === 'POST' || method === 'PUT') && bodyInput) {
+                try {
+                    // Validate JSON before sending
+                    JSON.parse(bodyInput);
+                    options.body = bodyInput;
+                } catch (e) {
+                    metaBox.textContent = 'ERROR: INVALID JSON BODY SYNTAX';
+                    metaBox.className = 'output-box status-error';
+                    payloadBox.textContent = e.message;
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(url, options);
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+                timeSpan.textContent = `TIME: ${duration}ms`;
+
+                // Status rendering
+                const statusClass = response.ok ? 'status-success' : 'status-error';
+                metaBox.className = `output-box ${statusClass}`;
+                metaBox.textContent = `HTTP/1.1 ${response.status} ${response.statusText}\nTYPE: CLIENT EXECUTION SUCCESS`;
+
+                // Extract Headers
+                let headersString = '';
+                response.headers.forEach((value, key) => {
+                    headersString += `${key}: ${value}\n`;
+                });
+                headersBox.textContent = headersString || '// NO HEADERS RETURNED';
+
+                // Parse Response Payload (JSON or text fallback)
+                const contentType = response.headers.get('content-type');
+                let responseData;
+                if (contentType && contentType.includes('application/json')) {
+                    const json = await response.json();
+                    responseData = JSON.stringify(json, null, 2);
+                } else {
+                    responseData = await response.text();
+                }
+
+                payloadBox.className = `output-box ${statusClass}`;
+                payloadBox.textContent = responseData;
+
+            } catch (error) {
+                const endTime = performance.now();
+                timeSpan.textContent = `TIME: ${Math.round(endTime - startTime)}ms`;
+                metaBox.className = 'output-box status-error';
+                metaBox.textContent = 'HTTP 000 // NETWORK / CORS ERROR';
+                headersBox.textContent = '// CONNECTION FAILED';
+                payloadBox.className = 'output-box status-error';
+                payloadBox.textContent = `ERROR: ${error.message}\n\nNOTE: IF HITTING EXTERNAL APIS, MAKE SURE THEY SUPPORT CORS OR RUN VIA A LOCAL PROXY.`;
+            }
+        }
+
+        function copyPayload() {
+            const text = document.getElementById('responsePayload').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('PAYLOAD COPIED TO CLIPBOARD');
+            });
+        }
+    </script>
+</body>
+</html>
