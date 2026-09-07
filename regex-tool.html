@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DATA_SANITIZER // BRUTALIST TOOL</title>
-    <style>
-        /* --- BRUTALIST DESIGN SYSTEM --- */
+<style>
+        /* --- BRUTALIST DESIGN SYSTEM  --- */
         * {
             margin: 0;
             padding: 0;
@@ -28,9 +28,9 @@
             text-transform: uppercase;
         }
 
+        /* REMOVED max-width SO IT FILLS THE FULL SCREEN */
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            width: 100%;
         }
 
         header {
@@ -74,13 +74,14 @@
             margin-bottom: 1.5rem;
         }
 
+        /* GRID NOW EXPANDS ACROSS THE FULL SCREEN */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
 
-        @media(max-width: 768px) {
+        @media(max-width: 900px) {
             .grid-2 {
                 grid-template-columns: 1fr;
             }
@@ -105,7 +106,7 @@
             font-size: 1rem;
             resize: vertical;
             outline: none;
-            text-transform: none; /* Keep raw code inputs readable */
+            text-transform: none;
         }
 
         textarea:focus, input[type="text"]:focus {
@@ -139,13 +140,13 @@
             background: #050505;
             border: 2px dashed var(--fg);
             padding: 1.5rem;
-            min-height: 150px;
-            max-height: 300px;
+            min-height: 200px;
+            max-height: 400px;
             overflow-y: auto;
             white-space: pre-wrap;
             word-break: break-all;
             text-transform: none;
-            color: #00ff66; /* Terminal output green hint */
+            color: #00ff66;
         }
 
         .meta-stats {
