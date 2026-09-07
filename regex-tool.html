@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATA_SANITIZER // BRUTALIST TOOL</title>
+    <style>
+        /* --- BRUTALIST DESIGN SYSTEM --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --accent: #ff0055;
+            --border: 3px solid #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.3;
+            padding: 2rem;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            border: var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .status-badge {
+            background: var(--bg);
+            color: var(--fg);
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            border: 2px solid var(--bg);
+        }
+
+        .b-box {
+            border: var(--border);
+            padding: 2rem;
+            background: var(--bg);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--fg);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media(max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            background: #0a0a0a;
+            color: var(--fg);
+            border: 2px solid var(--fg);
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            resize: vertical;
+            outline: none;
+            text-transform: none; /* Keep raw code inputs readable */
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .presets-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-btn {
+            background: var(--bg);
+            color: var(--fg);
+            border: 2px solid var(--fg);
+            padding: 0.5rem 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .preset-btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .output-box {
+            background: #050505;
+            border: 2px dashed var(--fg);
+            padding: 1.5rem;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            text-transform: none;
+            color: #00ff66; /* Terminal output green hint */
+        }
+
+        .meta-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--fg);
+            padding-top: 0.5rem;
+        }
+
+        .b-button {
+            display: inline-block;
+            background: var(--fg);
+            color: var(--bg);
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid var(--fg);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
+        }
+
+        .b-button:hover {
+            background: var(--bg);
+            color: var(--fg);
+            transform: translate(-3px, -3px);
+            box-shadow: 4px 4px 0px 0px var(--accent);
+        }
+
+        .footer-nav {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- HEADER -->
+        <header>
+            <div>
+                <h1>REGEX_SCRUBBER</h1>
+                <p>UTILITY_03 // DATA SANITIZATION ENGINE</p>
+            </div>
+            <div class="status-badge">
+                STATUS: ACTIVE
+            </div>
+        </header>
+
+        <!-- CONTROLS & PRESETS -->
+        <div class="b-box">
+            <h2>// SELECT EXTRACTION PATTERN</h2>
+            <div class="presets-bar">
+                <button class="preset-btn" onclick="setPreset('emails')">EXTRACT EMAILS</button>
+                <button class="preset-btn" onclick="setPreset('urls')">EXTRACT URLS</button>
+                <button class="preset-btn" onclick="setPreset('ips')">EXTRACT IP ADDRESSES</button>
+                <button class="preset-btn" onclick="setPreset('hex')">EXTRACT HEX CODES</button>
+            </div>
+
+            <label for="regexInput">CUSTOM REGEX EXPRESSION:</label>
+            <input type="text" id="regexInput" value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" oninput="processData()">
+        </div>
+
+        <!-- INPUT / OUTPUT GRID -->
+        <div class="grid-2">
+            
+            <!-- INPUT DATA -->
+            <div class="b-box" style="margin-bottom: 0;">
+                <h2>// RAW INPUT LOG</h2>
+                <label for="rawText">PASTE UNSTRUCTURED DATA:</label>
+                <textarea id="rawText" rows="10" placeholder="Paste messy logs, text strings, or data blocks here..." oninput="processData()">Error 504 on server instance. Contact admin at support@system-core.io or backup admin@root-node.net regarding connection drop. Visit https://api.system-core.io/v1 or http://localhost:8080 for details. IP logged: 192.168.1.50 and 10.0.0.1.</textarea>
+            </div>
+
+            <!-- OUTPUT RESULTS -->
+            <div class="b-box" style="margin-bottom: 0;">
+                <h2>// FILTERED OUTPUT</h2>
+                <label>PARSED RESULTS:</label>
+                <div id="outputResults" class="output-box"></div>
+                <div class="meta-stats">
+                    <span id="matchCount">MATCHES: 0</span>
+                    <button class="preset-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="copyOutput()">COPY OUTPUT</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BACK LINK -->
+        <div class="footer-nav">
+            <a href="index.html" class="b-button"><- BACK TO PORTFOLIO</a>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Regex Presets
+        const presets = {
+            emails: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+            urls: "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)",
+            ips: "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b",
+            hex: "#([a-fA-F0-9]{3}){1,2}\\b"
+        };
+
+        function setPreset(type) {
+            document.getElementById('regexInput').value = presets[type];
+            processData();
+        }
+
+        function processData() {
+            const rawText = document.getElementById('rawText').value;
+            const regexPattern = document.getElementById('regexInput').value;
+            const outputBox = document.getElementById('outputResults');
+            const matchCountEl = document.getElementById('matchCount');
+
+            try {
+                // Global flag and multiline flag for robust parsing
+                const regex = new RegExp(regexPattern, 'g');
+                const matches = rawText.match(regex);
+
+                if (matches && matches.length > 0) {
+                    // Remove duplicates for cleaner output view
+                    const uniqueMatches = [...new Set(matches)];
+                    outputBox.textContent = uniqueMatches.join('\n');
+                    matchCountEl.textContent = `MATCHES FOUND: ${uniqueMatches.length}`;
+                } else {
+                    outputBox.textContent = '// NO MATCHES FOUND';
+                    matchCountEl.textContent = 'MATCHES FOUND: 0';
+                }
+            } catch (e) {
+                outputBox.textContent = '// ERROR: INVALID REGEX PATTERN';
+                matchCountEl.textContent = 'MATCHES FOUND: 0';
+            }
+        }
+
+        function copyOutput() {
+            const outputText = document.getElementById('outputResults').textContent;
+            navigator.clipboard.writeText(outputText).then(() => {
+                alert('OUTPUT COPIED TO CLIPBOARD');
+            });
+        }
+
+        // Run on initial load
+        window.onload = processData;
+    </script>
+</body>
+</html>
