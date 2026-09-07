@@ -66,7 +66,7 @@ body {
     padding: 2rem;
     margin-bottom: 3rem;
     font-size: 1.5rem;
-    background: #0a0a0a;
+    background: #000000;
 }
 
 .projects-grid {
@@ -80,6 +80,7 @@ body {
     border: var(--border);
     padding: 1.5rem;
     background: var(--bg);
+    color: var(--fg);
     transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
     display: flex;
     flex-direction: column;
@@ -111,12 +112,13 @@ body {
 .project-link {
     display: inline-block;
     text-decoration: none;
-    background: currentColor;
+    background: var(--fg);
     color: var(--bg);
     padding: 0.8rem 1.2rem;
     font-weight: bold;
     text-align: center;
     border: var(--border);
+    opacity: 1;
 }
 
 .project-card:hover .project-link {
@@ -132,7 +134,7 @@ body {
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-    background: #0a0a0a;
+    background: #000000;
 }
 
 .social-links a {
@@ -189,7 +191,7 @@ body {
 .home-panel {
     border: var(--border);
     padding: 2rem;
-    background: #0a0a0a;
+    background: #000000;
 }
 
 .rss-panel {
@@ -276,7 +278,7 @@ body {
 
 .rss-summary {
     margin-top: 0.5rem;
-    color: #d0d0d0;
+    color: var(--fg);
     font-size: 0.9rem;
     line-height: 1.35;
     text-transform: none;
@@ -433,7 +435,7 @@ body {
 }
 
 .output-box {
-    background: #050505;
+    background: #000000;
     border: 2px dashed var(--fg);
     padding: 1.5rem;
     overflow-y: auto;
