@@ -235,9 +235,9 @@
             <!-- QUICK TEST PRESETS -->
             <label>QUICK API PRESETS:</label>
             <div class="preset-buttons">
-                <button class="preset-btn" onclick="loadPreset('GET', 'https://jsonplaceholder.typicode.com/posts/1', '')">GET JSONPLACEHOLDER POST</button>
-                <button class="preset-btn" onclick="loadPreset('GET', 'https://api.ipify.org?format=json', '')">GET PUBLIC IP</button>
-                <button class="preset-btn" onclick="loadPreset('POST', 'https://jsonplaceholder.typicode.com/posts', '{\n  \"title\": \"Brutalist Post\",\n  \"body\": \"Testing API mock client layout\",\n  \"userId\": 1\n}')">POST MOCK DATA</button>
+                <button class="preset-btn" onclick="runGetPostPreset()">GET JSONPLACEHOLDER POST</button>
+                <button class="preset-btn" onclick="runGetIpPreset()">GET PUBLIC IP</button>
+                <button class="preset-btn" onclick="runPostPreset()">POST MOCK DATA (AUTO-EXECUTE)</button>
             </div>
 
             <!-- REQUEST BAR -->
@@ -305,11 +305,33 @@
             }
         }
 
-        function loadPreset(method, url, body) {
-            document.getElementById('httpMethod').value = method;
-            document.getElementById('requestUrl').value = url;
-            document.getElementById('requestBody').value = body;
+        // Dedicated preset handlers to avoid HTML escaping bugs
+        function runGetPostPreset() {
+            document.getElementById('httpMethod').value = 'GET';
+            document.getElementById('requestUrl').value = 'https://jsonplaceholder.typicode.com/posts/1';
+            document.getElementById('requestBody').value = '';
             toggleBodyInput();
+            executeRequest();
+        }
+
+        function runGetIpPreset() {
+            document.getElementById('httpMethod').value = 'GET';
+            document.getElementById('requestUrl').value = 'https://api.ipify.org?format=json';
+            document.getElementById('requestBody').value = '';
+            toggleBodyInput();
+            executeRequest();
+        }
+
+        function runPostPreset() {
+            document.getElementById('httpMethod').value = 'POST';
+            document.getElementById('requestUrl').value = 'https://jsonplaceholder.typicode.com/posts';
+            document.getElementById('requestBody').value = JSON.stringify({
+                title: "Brutalist Post",
+                body: "Testing API mock client layout",
+                userId: 1
+            }, null, 2);
+            toggleBodyInput();
+            executeRequest();
         }
 
         async function executeRequest() {
@@ -342,7 +364,6 @@
 
             if ((method === 'POST' || method === 'PUT') && bodyInput) {
                 try {
-                    // Validate JSON before sending
                     JSON.parse(bodyInput);
                     options.body = bodyInput;
                 } catch (e) {
@@ -359,19 +380,16 @@
                 const duration = Math.round(endTime - startTime);
                 timeSpan.textContent = `TIME: ${duration}ms`;
 
-                // Status rendering
                 const statusClass = response.ok ? 'status-success' : 'status-error';
                 metaBox.className = `output-box ${statusClass}`;
                 metaBox.textContent = `HTTP/1.1 ${response.status} ${response.statusText}\nTYPE: CLIENT EXECUTION SUCCESS`;
 
-                // Extract Headers
                 let headersString = '';
                 response.headers.forEach((value, key) => {
                     headersString += `${key}: ${value}\n`;
                 });
                 headersBox.textContent = headersString || '// NO HEADERS RETURNED';
 
-                // Parse Response Payload (JSON or text fallback)
                 const contentType = response.headers.get('content-type');
                 let responseData;
                 if (contentType && contentType.includes('application/json')) {
@@ -391,7 +409,7 @@
                 metaBox.textContent = 'HTTP 000 // NETWORK / CORS ERROR';
                 headersBox.textContent = '// CONNECTION FAILED';
                 payloadBox.className = 'output-box status-error';
-                payloadBox.textContent = `ERROR: ${error.message}\n\nNOTE: IF HITTING EXTERNAL APIS, MAKE SURE THEY SUPPORT CORS OR RUN VIA A LOCAL PROXY.`;
+                payloadBox.textContent = `ERROR: ${error.message}`;
             }
         }
 
