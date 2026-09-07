@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNFILTERED // PORTFOLIO</title>
+    <style>
+        /* BRUTALIST RESET & TOXIC MONOSPACE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --accent: #ff0055; /* A raw neon punch, optional */
+            --border: 3px solid #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.2;
+            padding: 2rem;
+            text-transform: uppercase;
+        }
+
+        /* HARD-EDGED LAYOUT */
+        header {
+            border: var(--border);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 0.9;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            background: var(--bg);
+            color: var(--fg);
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--bg);
+            font-weight: bold;
+        }
+
+        /* SECTION HEADINGS */
+        h2 {
+            font-size: 2rem;
+            border-bottom: var(--border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ABOUT / BIO */
+        .bio {
+            border: var(--border);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            background: #0a0a0a;
+        }
+
+        /* PROJECTS GRID */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            border: var(--border);
+            padding: 1.5rem;
+            background: var(--bg);
+            transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+        }
+
+        .project-card:hover {
+            background: var(--fg);
+            color: var(--bg);
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px 0px #ff0055;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            text-transform: none; /* Keeps description readable, or remove for total chaos */
+        }
+
+        .project-link {
+            display: inline-block;
+            text-decoration: none;
+            background: currentColor;
+            color: var(--bg);
+            padding: 0.8rem 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid currentColor;
+        }
+
+        .project-card:hover .project-link {
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        /* CONTACT / FOOTER */
+        footer {
+            border: var(--border);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            background: #0a0a0a;
+        }
+
+        .social-links a {
+            color: var(--fg);
+            text-decoration: none;
+            border: 2px solid var(--fg);
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .social-links a:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        /* MEDIA QUERIES */
+        @media(max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            header {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER BLOCK -->
+    <header>
+        <div>
+            <h1>[YOUR NAME]</h1>
+            <p>BUILDER // BREAKER // CODER</p>
+        </div>
+        <div class="status">
+            SYSTEM: ONLINE
+        </div>
+    </header>
+
+    <!-- BIO BLOCK -->
+    <section class="bio">
+        <p>> I build digital artifacts. No fluff, no whitespace minimalism, just pure utility, raw code, and unfiltered execution. Look at the work below.</p>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section>
+        <h2>// INDEX OF WORK</h2>
+        <div class="projects-grid">
+            
+            <!-- PROJECT 1 -->
+            <div class="project-card">
+                <div>
+                    <div class="project-title">PROJECT_01</div>
+                    <p class="project-desc">A heavy-duty utility tool designed to process raw datasets instantly without unnecessary bloat or UI layers.</p>
+                </div>
+                <a href="#" class="project-link">VIEW SOURCE // DEMO</a>
+            </div>
+
+            <!-- PROJECT 2 -->
+            <div class="project-card">
+                <div>
+                    <div class="project-title">PROJECT_02</div>
+                    <p class="project-desc">An experimental command-line interface web wrapper built for extreme speed and direct system inputs.</p>
+                </div>
+                <a href="#" class="project-link">VIEW SOURCE // DEMO</a>
+            </div>
+
+            <!-- PROJECT 3 -->
+            <div class="project-card">
+                <div>
+                    <div class="project-title">PROJECT_03</div>
+                    <p class="project-desc">An unapologetic dashboard built to monitor network traffic with zero aesthetic compromises.</p>
+                </div>
+                <a href="#" class="project-link">VIEW SOURCE // DEMO</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACT -->
+    <footer>
+        <div>
+            <p>REACH OUT DIRECTLY:</p>
+            <p>EMAIL@YOURDOMAIN.COM</p>
+        </div>
+        <div class="social-links">
+            <a href="https://github.com" target="_blank">GITHUB</a>
+            <a href="https://twitter.com" target="_blank">TWITTER</a>
+            <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
+        </div>
+    </footer>
+
+</body>
+</html>
