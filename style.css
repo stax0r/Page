@@ -8,7 +8,8 @@
     --bg: #000000;
     --fg: #ffffff;
     --accent: #ff0055;
-    --border: 3px solid #ffffff;
+    --border: 2px solid #ffffff;
+    --border-soft: 1px solid #ffffff;
 }
 
 body {
@@ -49,7 +50,7 @@ body {
     background: var(--bg);
     color: var(--fg);
     padding: 0.5rem 1rem;
-    border: 2px solid var(--bg);
+    border: var(--border);
     font-weight: bold;
 }
 
@@ -97,7 +98,7 @@ body {
     font-size: 1.8rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    border-bottom: 2px solid currentColor;
+    border-bottom: var(--border);
     padding-bottom: 0.5rem;
 }
 
@@ -115,7 +116,7 @@ body {
     padding: 0.8rem 1.2rem;
     font-weight: bold;
     text-align: center;
-    border: 2px solid currentColor;
+    border: var(--border);
 }
 
 .project-card:hover .project-link {
@@ -137,7 +138,7 @@ body {
 .social-links a {
     color: var(--fg);
     text-decoration: none;
-    border: 2px solid var(--fg);
+    border: var(--border);
     padding: 0.5rem 1rem;
     margin-right: 1rem;
     display: inline-block;
@@ -191,9 +192,14 @@ body {
     background: #0a0a0a;
 }
 
+.rss-panel {
+    display: flex;
+    flex-direction: column;
+}
+
 .homepage h2 {
     font-size: 1.5rem;
-    border-bottom: 2px solid var(--fg);
+    border-bottom: var(--border);
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
 }
@@ -211,13 +217,13 @@ body {
 .access-category h3 {
     color: #00ff66;
     font-size: 0.9rem;
-    border-bottom: 1px solid var(--fg);
+    border-bottom: var(--border-soft);
     padding-bottom: 0.35rem;
 }
 
 .access-category a {
     display: block;
-    border: 2px solid var(--fg);
+    border: var(--border);
     padding: 0.75rem 1rem;
     color: var(--fg);
     text-decoration: none;
@@ -229,14 +235,10 @@ body {
     color: var(--bg);
 }
 
-.panel-note {
-    margin-bottom: 1.5rem;
-    text-transform: none;
-}
-
 .rss-list {
     list-style: none;
-    flex: 0 0 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .rss-list li {
@@ -245,11 +247,11 @@ body {
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem 0;
-    border-bottom: 1px solid var(--fg);
+    border-bottom: var(--border-soft);
 }
 
 .rss-list li:first-child {
-    border-top: 1px solid var(--fg);
+    border-top: var(--border-soft);
 }
 
 .rss-list a {
@@ -291,14 +293,17 @@ body {
 }
 
 .rss-window {
-    height: 24rem;
+    flex: 0 0 42rem;
+    height: 42rem;
+    max-height: 70vh;
+    min-height: 18rem;
     overflow-y: auto;
-    border: 1px solid var(--fg);
+    border: var(--border);
     padding: 0 1rem;
 }
 
 .rss-track {
-    height: max-content;
+    display: block;
 }
 
 .rss-message {
@@ -345,7 +350,7 @@ body {
     color: var(--fg);
     padding: 0.5rem 1rem;
     font-weight: bold;
-    border: 2px solid var(--bg);
+    border: var(--border);
 }
 
 .b-box {
@@ -357,7 +362,7 @@ body {
 
 .utility-page h2 {
     font-size: 1.5rem;
-    border-bottom: 2px solid var(--fg);
+    border-bottom: var(--border);
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
 }
@@ -379,7 +384,7 @@ body {
 .utility-page select {
     background: #0a0a0a;
     color: var(--fg);
-    border: 2px solid var(--fg);
+    border: var(--border);
     padding: 1rem;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1rem;
@@ -409,7 +414,7 @@ body {
 .preset-btn {
     background: var(--bg);
     color: var(--fg);
-    border: 2px solid var(--fg);
+    border: var(--border);
     padding: 0.5rem 1rem;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
@@ -453,7 +458,7 @@ body {
     justify-content: space-between;
     font-size: 0.9rem;
     margin-top: 0.5rem;
-    border-top: 1px solid var(--fg);
+    border-top: var(--border-soft);
     padding-top: 0.5rem;
 }
 
