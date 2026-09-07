@@ -149,10 +149,6 @@ body {
     color: var(--bg);
 }
 
-.page-nav {
-    margin: -1.5rem 0 3rem;
-}
-
 .personal-projects {
     margin-bottom: 3rem;
 }
@@ -185,7 +181,7 @@ body {
 
 .home-grid {
     display: grid;
-    grid-template-columns: minmax(240px, 0.8fr) minmax(320px, 1.2fr);
+    grid-template-columns: minmax(260px, 0.35fr) minmax(0, 1fr);
     gap: 2rem;
 }
 
@@ -207,16 +203,28 @@ body {
     gap: 1rem;
 }
 
-.channel-list a {
+.access-category {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.access-category h3 {
+    color: #00ff66;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--fg);
+    padding-bottom: 0.35rem;
+}
+
+.access-category a {
     display: block;
     border: 2px solid var(--fg);
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     color: var(--fg);
     text-decoration: none;
     font-weight: bold;
 }
 
-.channel-list a:hover {
+.access-category a:hover {
     background: var(--fg);
     color: var(--bg);
 }
@@ -228,11 +236,13 @@ body {
 
 .rss-list {
     list-style: none;
+    flex: 0 0 100%;
 }
 
 .rss-list li {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 1rem;
     padding: 1rem 0;
     border-bottom: 1px solid var(--fg);
@@ -247,6 +257,29 @@ body {
     font-weight: bold;
 }
 
+.rss-content {
+    min-width: 0;
+}
+
+.rss-source {
+    display: block;
+    color: #00ff66;
+    font-size: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.rss-title {
+    display: block;
+}
+
+.rss-summary {
+    margin-top: 0.5rem;
+    color: #d0d0d0;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    text-transform: none;
+}
+
 .rss-list a:hover {
     color: var(--accent);
 }
@@ -255,6 +288,23 @@ body {
     color: #00ff66;
     text-align: right;
     text-transform: uppercase;
+}
+
+.rss-window {
+    height: 24rem;
+    overflow-y: auto;
+    border: 1px solid var(--fg);
+    padding: 0 1rem;
+}
+
+.rss-track {
+    height: max-content;
+}
+
+.rss-message {
+    color: var(--accent);
+    padding: 1rem 0;
+    list-style: none;
 }
 
 .home-nav {

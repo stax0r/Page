@@ -17,38 +17,138 @@
 
     <main class="home-grid">
         <section class="home-panel">
-            <h2>// DIRECT CHANNELS</h2>
+            <h2>// QUICK ACCESS</h2>
             <div class="channel-list">
-                <!-- Replace the placeholder addresses and URL with your own links. -->
-                <a href="mailto:your-gmail-address@gmail.com">GMAIL</a>
-                <a href="mailto:stax0r@proton.me">PROTONMAIL</a>
-                <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YOUTUBE</a>
+                <div class="access-category">
+                    <h3>EMAIL</h3>
+                    <a href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">GMAIL</a>
+                    <a href="https://mail.proton.me/" target="_blank" rel="noopener noreferrer">PROTONMAIL</a>
+                </div>
+                <div class="access-category">
+                    <h3>CALENDAR</h3>
+                    <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">GOOGLE CALENDAR</a>
+                </div>
+                <div class="access-category">
+                    <h3>DEVELOPMENT</h3>
+                    <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer">FIREBASE</a>
+                    <a href="https://github.com/stax0r" target="_blank" rel="noopener noreferrer">GITHUB</a>
+                </div>
+                <div class="access-category">
+                    <h3>MEDIA</h3>
+                    <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YOUTUBE</a>
+                </div>
             </div>
         </section>
 
         <section class="home-panel rss-panel">
             <h2>// RSS NEWS FEEDS</h2>
-            <p class="panel-note">EDIT THIS LIST DIRECTLY IN HOMEPAGE.HTML.</p>
-            <ul class="rss-list">
-                <!-- Add, remove, or replace entries as needed. -->
-                <li>
-                    <a href="https://feeds.bbci.co.uk/news/rss.xml" target="_blank" rel="noopener noreferrer">BBC NEWS</a>
-                    <span>GLOBAL HEADLINES</span>
-                </li>
-                <li>
-                    <a href="https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml" target="_blank" rel="noopener noreferrer">NYT TECHNOLOGY</a>
-                    <span>TECHNOLOGY</span>
-                </li>
-                <li>
-                    <a href="https://hnrss.org/frontpage" target="_blank" rel="noopener noreferrer">HACKER NEWS</a>
-                    <span>ENGINEERING // STARTUPS</span>
-                </li>
-            </ul>
+            <div class="rss-window">
+                <div class="rss-track">
+                    <ul class="rss-list">
+                        <li class="rss-message">LOADING NEWS...</li>
+                    </ul>
+                </div>
+            </div>
         </section>
     </main>
 
     <nav class="home-nav" aria-label="Primary navigation">
         <a class="b-button" href="index.html">OPEN PORTFOLIO</a>
     </nav>
+
+    <script>
+        // Add, remove, or replace RSS sources here.
+        const rssFeeds = [
+            {
+                name: 'BBC NEWS',
+                category: 'GLOBAL HEADLINES',
+                url: 'https://feeds.bbci.co.uk/news/rss.xml'
+            },
+            {
+                name: 'NYT TECHNOLOGY',
+                category: 'TECHNOLOGY',
+                url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml'
+            },
+            {
+                name: 'HACKER NEWS',
+                category: 'ENGINEERING // STARTUPS',
+                url: 'https://hnrss.org/frontpage'
+            }
+        ];
+
+        const feedProxy = 'https://api.rss2json.com/v1/api.json?rss_url=';
+        const rssList = document.querySelector('.rss-list');
+        const rssWindow = document.querySelector('.rss-window');
+
+        function getSummary(description) {
+            const plainText = document.createElement('div');
+            plainText.innerHTML = description || '';
+            const summary = plainText.textContent.trim().replace(/\s+/g, ' ');
+            return summary ? `${summary.slice(0, 240)}${summary.length > 240 ? '...' : ''}` : 'NO SUMMARY AVAILABLE.';
+        }
+
+        function createFeedItem(feed, item) {
+            const entry = document.createElement('li');
+            const content = document.createElement('div');
+            const source = document.createElement('small');
+            const link = document.createElement('a');
+            const summary = document.createElement('p');
+            const meta = document.createElement('span');
+
+            source.textContent = `${feed.name} // ${feed.category}`;
+            link.href = item.link || feed.url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = item.title || feed.name;
+            summary.textContent = getSummary(item.description);
+            meta.textContent = item.pubDate
+                ? new Date(item.pubDate).toLocaleDateString()
+                : feed.category;
+
+            content.className = 'rss-content';
+            source.className = 'rss-source';
+            link.className = 'rss-title';
+            summary.className = 'rss-summary';
+            content.append(source, link, summary);
+            entry.append(content, meta);
+            return entry;
+        }
+
+        async function loadFeed(feed) {
+            const response = await fetch(`${feedProxy}${encodeURIComponent(feed.url)}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.status !== 'ok' || !Array.isArray(data.items)) {
+                throw new Error(data.message || 'RSS SERVICE ERROR');
+            }
+
+            const items = data.items.slice(0, 20);
+            return items.map((item) => createFeedItem(feed, item));
+        }
+
+        async function loadNews() {
+            const scrollTop = rssWindow.scrollTop;
+            const results = await Promise.allSettled(rssFeeds.map(loadFeed));
+            const entries = results.flatMap((result, index) => {
+                if (result.status === 'fulfilled') {
+                    return result.value;
+                }
+
+                const fallback = document.createElement('li');
+                fallback.className = 'rss-message';
+                fallback.textContent = `${rssFeeds[index].name}: FEED UNAVAILABLE`;
+                return [fallback];
+            });
+
+            rssList.replaceChildren(...entries);
+            rssWindow.scrollTop = scrollTop;
+        }
+
+        loadNews();
+        setInterval(loadNews, 15 * 60 * 1000);
+    </script>
 </body>
 </html>
