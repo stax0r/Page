@@ -102,7 +102,7 @@
             link.textContent = item.title || feed.name;
             summary.textContent = getSummary(item.description);
             meta.textContent = item.pubDate
-                ? new Date(item.pubDate).toLocaleDateString()
+                ? new Date(item.pubDate).toISOString().slice(0, 10)
                 : feed.category;
 
             content.className = 'rss-content';
